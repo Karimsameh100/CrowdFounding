@@ -49,3 +49,18 @@ class RegistrationForm(forms.ModelForm):
 
         if password != confirm_password:
             raise ValidationError("please , confirm the password")
+
+
+
+
+# /////////////////
+
+class LoginForm(forms.Form):
+    email = forms.EmailField(max_length=200, help_text='Required',widget=forms.EmailInput(attrs={
+        "placeholder": "Email",
+        "class": "form-control"
+    }))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={
+        "placeholder": "Password",
+        "class": "form-control"
+    }))

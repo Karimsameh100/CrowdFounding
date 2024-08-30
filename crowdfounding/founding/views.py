@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
-from .forms import ProjectForm,CategoryForm
+from .forms import ProjectForm,CategoryForm,LoginForm
 from .models import *
 
 # Create your views here.
@@ -82,10 +82,40 @@ def register(request):
     else:
         form = RegistrationForm()
 
-    return render(request, 'founding/registerForm.html', {'form': form})
+    return render(request, 'founding/registerform.html', {'form': form})
 
+# ////////////////////////
+from django.contrib.auth import authenticate, login as auth_login
 
+from django.shortcuts import render, redirect
+from django.http import HttpResponse
+from .models import MyUser  
+from .forms import LoginForm
 
+def login(request):
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password']
+            
+            
+            user = MyUser.objects.filter(email=email, password=password)
+            
+            if user.exists():  
+                request.session['email'] = email
+                return redirect('home')  
+            else:
+                return HttpResponse('Invalid login credentials.')  
+        else:
+            return HttpResponse('Invalid form input.')  
+    else:
+        form = LoginForm()
+    
+    return render(request, 'founding/login.html', {'form': form})
 
-
-
+           
+              
+    
+    
