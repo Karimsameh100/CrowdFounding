@@ -20,6 +20,10 @@ class Project(models.Model):
     end_time = models.DateTimeField()
     is_active = models.BooleanField(default=True)
 
+    @property
+    def is_featured(self):
+        return self.donations.count() > 10 or self.ratings.count() > 5
+
     def __str__(self):
         return self.title
 

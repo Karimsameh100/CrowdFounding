@@ -8,3 +8,91 @@
 <h1>Welcome to FoundFlow </h1>
 <h3>“Together, We Make It Happen”</h3>
 {% endblock content %}
+
+{% block maincontant %}
+
+ <div id="slider" class="slideshow-container">
+  <h2>Highest Rated Running Projects</h2>
+  {% for project in latest_projects %}
+    <div class="slide fade">
+      <img src="{{ project.pictures.url }}" alt="{{ project.title }}" width="200" height="150"> <!-- Display project image -->
+      <h3>{{ project.title }}</h3>
+      <p>Rating: {{ project.avg_rating }} / 5</p>
+      <p>Total Target: {{ project.total_target }}</p>
+      <a href="{% url 'project_detail' project.id %}">Donate Now</a>
+    </div>
+  {% endfor %}
+</div>
+
+
+<script>
+  $(document).ready(function() {
+  $('#slider').slick({
+    dots: true,
+    infinite: true,
+    speed: 300,
+    slidesToShow: 1, // display only one slide at a time
+    slidesToScroll: 1, // scroll one slide at a time
+    autoplay: true, // enable autoplay
+    autoplaySpeed: 5000, // scroll to the next slide after 5 seconds
+    arrows: false, // hide the navigation arrows
+    centerMode: true, // enable center mode to create a carousel effect
+    centerPadding: '60px', // add some padding to create a carousel effect
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        }
+      },
+    ]
+  });
+});
+</script>
+
+  <!-- List of latest 5 projects -->
+  <h2>Latest Projects</h2>
+<div class="project-cards">
+  {% for project in latest_projects %}
+    <div class="project-card">
+      <img src="{{ project.pictures.url }}" alt="{{ project.title }}" width="100" height="100"> <!-- Display project image -->
+      <div class="project-info">
+        <h3>{{ project.title }}</h3>
+        <p>Rating: {{ project.avg_rating }} / 5</p>
+        <p>Total Target: {{ project.total_target }}</p>
+        <a href="{% url 'project_detail' project.id %}">Donate Now</a>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+  <!-- List of latest 5 featured projects -->
+  <h2>Featured Projects</h2>
+  <ul>
+    {% for project in featured_projects %}
+      <li>
+        <img src="{{ project.pictures.url }}" alt="{{ project.title }}" width="50" height="50"> <!-- Display project image -->
+        <a href="{% url 'project_detail' project.id %}">{{ project.title }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+
+  <!-- List of categories -->
+  <h2>Categories</h2>
+  <ul>
+    {% for category in categories %}
+      <li>
+        <a href="{% url 'category_projects' category.id %}">{{ category.name }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+
+  <!-- Search bar -->
+  {% comment %} <form action="{% url 'search_projects' %}" method="get">
+    <input type="search" name="q" placeholder="Search projects by title or tag">
+    <button type="submit">Search</button>
+  </form> {% endcomment %}
+
+
+{% endblock maincontant %}
