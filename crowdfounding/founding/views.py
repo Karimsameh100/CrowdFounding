@@ -1,13 +1,34 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from .forms import ProjectForm,CategoryForm
+from django.db.models import Avg
 from .models import *
+from .models import Project,Category,Rating
 
 # Create your views here.
-
 def home(request):
-    return render(request,"founding/home.html")
+    ratings = Rating.objects.values('project_id').annotate(total_rating=Avg('rating')).order_by('-total_rating')
+    highest_rated_projects = Project.objects.filter(id__in=[rating['project_id'] for rating in ratings[:5]], is_active=True)
+    latest_projects = Project.objects.all().order_by('-start_time')[:5]
+    for project in latest_projects:
+        project.avg_rating = project.ratings.all().aggregate(Avg('rating'))['rating__avg']
+    # featured_projects = Project.objects.filter(is_featured=True).order_by('-start_time')[:5]
+    categories = Category.objects.all()
 
+    return render(request, 'founding/home.html', {
+        'highest_rated_projects': highest_rated_projects,
+        'latest_projects': latest_projects,
+        'categories': categories,
+    })
+
+
+# def home(request):
+#     return render(request,"founding/home.html")
+
+def category_projects(request, category_slug):
+    category = Category.objects.get(slug=category_slug)
+    projects = Project.objects.filter(category=category)
+    return render(request, 'founding/category_projects.html', {'projects': projects})
 
 
 def create_category(request):
