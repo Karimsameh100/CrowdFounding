@@ -1,4 +1,4 @@
-<!-- base.html -->
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,12 +6,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block title %}{% endblock %}</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-  <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="{% url 'home' %}">Project Name</a>
+    <a class="navbar-brand" href="{% url 'home' %}"> FoundFlow </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -21,10 +21,10 @@
           <a class="nav-link" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'about' %}">About</a>
+          <a class="nav-link" href="#">About</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'contact' %}">Contact</a>
+          <a class="nav-link" href="#">Contact</a>
         </li>
       </ul>
       <form class="form-inline my-2 my-lg-0">
@@ -40,14 +40,38 @@
   </div>
 
   <!-- Footer -->
-  <footer class="footer">
-    <div class="container">
+  <!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6">
+         <h3>Contact Us:</h3>
+        <ul class="social-media">
+          <li><a href="#" target="_blank"><img src="{% static 'img/facebook.webp' %}" alt="Facebook" width="70px" height="70px" ></a></li>
+          <li><a href="#" target="_blank"><img src="{% static 'img/twitter.webp' %}" alt="Twitter" width="60px" height="60px"></a></li>
+          <li><a href="#" target="_blank"><img src="{% static 'img/gmail.png' %}" alt="Instagram" width="60px" height="60px"></a></li>
+        </ul>
+      </div>
+      
+      <div class="col-md-6 text-right">
+        <h3 >Payment Methods:</h3>
+        <ul class="payment-methods">
+          <li><img src="{% static 'img/visa.png' %}" alt="Visa" width="70px" height="70px"> Visa</li>
+          <li><img src="{% static 'img/master.png' %}" alt="Mastercard" width="70px" height="70px"> Mastercard</li>
+          <li><img src="{% static 'img/Paypal.png' %}" alt="PayPal" width="70px" height="70px"> PayPal</li>
+        </ul>
+      </div>
+    </div>
+    <div class="container text-center">
+      <hr/>
       <p>&copy; 2023 Project Name. All rights reserved.</p>
     </div>
-  </footer>
+  </div>
+   
+</footer>
 
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.3/js/bootstrap.min.js"></script>
   <script src="{% static 'js/custom.js' %}"></script>
 </body>
 </html>
