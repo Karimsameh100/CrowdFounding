@@ -1,13 +1,34 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
-from .forms import ProjectForm,CategoryForm
+from .forms import ProjectForm,CategoryForm,LoginForm
 from .models import *
+from  django.db.models import Avg
+from .models import Project,Category,Rating
 
 # Create your views here.
-
 def home(request):
-    return render(request,"founding/home.html")
+    ratings = Rating.objects.values('project_id').annotate(total_rating=Avg('rating')).order_by('-total_rating')
+    highest_rated_projects = Project.objects.filter(id__in=[rating['project_id'] for rating in ratings[:5]], is_active=True)
+    latest_projects = Project.objects.all().order_by('-start_time')[:5]
+    for project in latest_projects:
+        project.avg_rating = project.ratings.all().aggregate(Avg('rating'))['rating__avg']
+    # featured_projects = Project.objects.filter(is_featured=True).order_by('-start_time')[:5]
+    categories = Category.objects.all()
 
+    return render(request, 'founding/home.html', {
+        'highest_rated_projects': highest_rated_projects,
+        'latest_projects': latest_projects,
+        'categories': categories,
+    })
+
+
+# def home(request):
+#     return render(request,"founding/home.html")
+
+def category_projects(request, category_slug):
+    category = Category.objects.get(slug=category_slug)
+    projects = Project.objects.filter(category=category)
+    return render(request, 'founding/category_projects.html', {'projects': projects})
 
 
 def create_category(request):
@@ -82,10 +103,40 @@ def register(request):
     else:
         form = RegistrationForm()
 
-    return render(request, 'founding/registerForm.html', {'form': form})
+    return render(request, 'founding/registerform.html', {'form': form})
 
+# ////////////////////////
+from django.contrib.auth import authenticate, login as auth_login
 
+from django.shortcuts import render, redirect
+from django.http import HttpResponse
+from .models import MyUser  
+from .forms import LoginForm
 
+def login(request):
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password']
+            
+            
+            user = MyUser.objects.filter(email=email, password=password)
+            
+            if user.exists():  
+                request.session['email'] = email
+                return redirect('home')  
+            else:
+                return HttpResponse('Invalid login credentials.')  
+        else:
+            return HttpResponse('Invalid form input.')  
+    else:
+        form = LoginForm()
+    
+    return render(request, 'founding/login.html', {'form': form})
 
-
-
+           
+              
+    
+    
