@@ -43,3 +43,27 @@ class Rating(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='ratings')
     #user = models.ForeignKey(User, on_delete=models.CASCADE)
     rating = models.PositiveIntegerField(default=0)  # Range 1 to 5
+
+
+
+
+
+
+
+# =============================
+
+
+class MyUser(models.Model):
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    email = models.EmailField(unique=True)
+    password = models.CharField(max_length=100)  
+    mobile_phone = models.CharField(max_length=11)
+    profile_picture = models.ImageField(upload_to='profile_pictures/', blank=True, null=True)
+
+    def __str__(self):
+        return f'{self.first_name} {self.last_name}'
+
+
+
+
