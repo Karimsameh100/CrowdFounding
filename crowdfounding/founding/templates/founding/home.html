@@ -10,45 +10,37 @@
 {% endblock content %}
 
 {% block maincontant %}
-
- <div id="slider" class="slideshow-container">
+<div id="slider" class="carousel slide" data-ride="carousel">
   <h2>Highest Rated Running Projects</h2>
-  {% for project in latest_projects %}
-    <div class="slide fade">
-      <img src="{{ project.pictures.url }}" alt="{{ project.title }}" width="200" height="150"> <!-- Display project image -->
-      <h3>{{ project.title }}</h3>
-      <p>Rating: {{ project.avg_rating }} / 5</p>
-      <p>Total Target: {{ project.total_target }}</p>
-      <a href="{% url 'project_detail' project.id %}">Donate Now</a>
-    </div>
-  {% endfor %}
+  <div class="carousel-inner">
+    {% for project in latest_projects %}
+      <div class="carousel-item {% if forloop.first %}active{% endif %}">
+        <img src="{{ project.pictures.url }}" alt="{{ project.title }}" width="200" height="150"> <!-- Display project image -->
+        <h3>{{ project.title }}</h3>
+        <p>Rating: {{ project.avg_rating }} / 5</p>
+        <p>Total Target: {{ project.total_target }}</p>
+        <a href="{% url 'project_detail' project.id %}">Donate Now</a>
+      </div>
+    {% endfor %}
+  </div>
+  <a class="carousel-control-prev" href="#slider" role="button" data-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+  <a class="carousel-control-next" href="#slider" role="button" data-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+  </a>
 </div>
 
 
 <script>
   $(document).ready(function() {
-  $('#slider').slick({
-    dots: true,
-    infinite: true,
-    speed: 300,
-    slidesToShow: 1, // display only one slide at a time
-    slidesToScroll: 1, // scroll one slide at a time
-    autoplay: true, // enable autoplay
-    autoplaySpeed: 5000, // scroll to the next slide after 5 seconds
-    arrows: false, // hide the navigation arrows
-    centerMode: true, // enable center mode to create a carousel effect
-    centerPadding: '60px', // add some padding to create a carousel effect
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-        }
-      },
-    ]
+    $('#slider').carousel({
+      interval: 2000 // change the delay to 2 seconds
+    });
+    $('#slider').carousel('cycle'); // start the carousel
   });
-});
 </script>
 
   <!-- List of latest 5 projects -->
