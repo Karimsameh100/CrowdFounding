@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404 
 from django.http import HttpResponse
 from .forms import ProjectForm,CategoryForm
 from .models import *
@@ -45,3 +45,11 @@ def project_list(request):
 def project_detail(request, pk):
     project = get_object_or_404(Project, pk=pk)
     return render(request, 'founding/project_detail.html', {'project': project})
+
+
+def profile(request , slug):
+    profile = Profile.objects.get(slug=slug)
+    context={
+        'profile' : profile
+    }
+    return render(request , 'profile.html' , context)
