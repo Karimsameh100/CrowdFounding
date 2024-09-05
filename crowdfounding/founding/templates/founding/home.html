@@ -4,14 +4,13 @@
  Home
 {% endblock title %}
 
-{% block content %}
+{% comment %} {% block content %}
 <h1>Welcome to FoundFlow </h1>
 <h3>“Together, We Make It Happen”</h3>
-{% endblock content %}
+{% endblock content %} {% endcomment %}
 
 {% block maincontant %}
 <div id="slider" class="carousel slide" data-ride="carousel">
-  <h2>Highest Rated Running Projects</h2>
   <div class="carousel-inner">
     {% for project in latest_projects %}
       <div class="carousel-item {% if forloop.first %}active{% endif %}">
@@ -44,7 +43,7 @@
 </script>
 
   <!-- List of latest 5 projects -->
-  <h2>Latest Projects</h2>
+  <h2 class="header">Latest Projects</h2>
 <div class="project-cards">
   {% for project in latest_projects %}
     <div class="project-card">
@@ -53,14 +52,14 @@
         <h3>{{ project.title }}</h3>
         <p>Rating: {{ project.avg_rating }} / 5</p>
         <p>Total Target: {{ project.total_target }}</p>
-        <a href="{% url 'project_detail' project.id %}">Donate Now</a>
+        <a href="{% url 'project_detail' project.id %}" class="butn btn btn-primary">Donate Now</a>
       </div>
     </div>
   {% endfor %}
 </div>
 
   <!-- List of latest 5 featured projects -->
-  <h2>Featured Projects</h2>
+  <h2 class="header">Featured Projects</h2>
   <ul>
     {% for project in featured_projects %}
       <li>
@@ -71,7 +70,7 @@
   </ul>
 
   <!-- List of categories -->
-  <h2>Categories</h2>
+  <h2 class="header">Categories</h2>
   <ul>
     {% for category in categories %}
       <li>

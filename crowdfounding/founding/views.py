@@ -4,6 +4,7 @@ from .forms import ProjectForm,CategoryForm,LoginForm
 from .models import *
 from  django.db.models import  Avg
 from .models import Project,Category,Rating
+from django.db.models import Q
 
 # Create your views here.
 def home(request):
@@ -20,6 +21,14 @@ def home(request):
         'latest_projects': latest_projects,
         'categories': categories,
     })
+
+
+def search_projects(request):
+    query = request.GET.get('q')
+    projects = Project.objects.filter(
+        Q(title__icontains=query) | Q(tags__icontains=query)
+    )
+    return render(request, 'founding/search_results.html', {'projects': projects})
 
 
 # def home(request):
