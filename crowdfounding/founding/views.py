@@ -87,23 +87,53 @@ from .models import MyUser
 
 
 
+# def register(request):
+#     if request.method == 'POST':
+#         form = RegistrationForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             user = MyUser.objects.create(
+#                 first_name=form.cleaned_data['first_name'],
+#                 last_name=form.cleaned_data['last_name'],
+#                 email=form.cleaned_data['email'],
+#                 password=form.cleaned_data['password'],  
+#                 mobile_phone=form.cleaned_data['mobile_phone'],
+#                 profile_picture=form.cleaned_data['profile_picture'],
+#             )
+#             return redirect('login')
+#     else:
+#         form = RegistrationForm()
+
+#     return render(request, 'founding/registerform.html', {'form': form})
+
+
+from django.shortcuts import render, redirect
+from .forms import RegistrationForm
+from django.contrib.auth.models import User
+
 def register(request):
     if request.method == 'POST':
         form = RegistrationForm(request.POST, request.FILES)
         if form.is_valid():
-            user = MyUser.objects.create(
+           
+            user = User(
                 first_name=form.cleaned_data['first_name'],
                 last_name=form.cleaned_data['last_name'],
                 email=form.cleaned_data['email'],
-                password=form.cleaned_data['password'],  
-                mobile_phone=form.cleaned_data['mobile_phone'],
-                profile_picture=form.cleaned_data['profile_picture'],
+                username=form.cleaned_data['email']
             )
-            return redirect('login')
+            user.set_password(form.cleaned_data['password'])
+            user.save()
+
+           
+            return render(request, 'founding/registerform.html', {
+                'form': form,
+                'success': True
+            })
     else:
         form = RegistrationForm()
 
     return render(request, 'founding/registerform.html', {'form': form})
+
 
 # ////////////////////////
 from django.contrib.auth import authenticate, login as auth_login
@@ -123,6 +153,7 @@ def login(request):
             
             
             user = MyUser.objects.filter(email=email, password=password)
+            # user = User.objects.filter(email=email, password=password)
             
             if user.exists():  
                 request.session['email'] = email
