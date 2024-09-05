@@ -1,0 +1,22 @@
+
+
+
+{% extends 'base.html' %}
+
+{% block maincontant %}
+  <h1 class="header">Search Results</h1>
+  <div class="project-cards">
+    {% for project in projects %}
+        <div class="project-card">
+        <a href="{% url 'project_detail' project.id %} ">
+            <img src="{{ project.pictures.url }}" alt="{{ project.title }}" class="project-image">
+            <div class="project-info">
+              <h3 id="searchH">{{ project.title }}</h3>
+              
+              <a href="{% url 'project_detail' project.id %}" class="btn btn-primary butn">Donate Now</a>
+            </div>
+        </a>
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}

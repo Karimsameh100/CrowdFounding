@@ -15,7 +15,7 @@
   
   h1, h2, h3, h4, h5, h6 {
     font-weight: bold;
-    color: #337ab7;
+    color: #32ce60;
   }
   
   a {
@@ -31,7 +31,7 @@
   
   .navbar {
     padding: 1rem 2rem;
-    background-color: #337ab7;
+    background-color: #9ab733;
     border-bottom: 1px solid #23527c;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
@@ -79,11 +79,13 @@
   
 
   #slider {
-    width: 100%;
-     height: 800px;
+    width: 90%;
+     height: 60vh;
     overflow: hidden; /* hide the overflow to create a carousel effect */
     padding: 0; /* remove any padding */
     margin: 0; /* remove any margin */
+    display: flex;
+    justify-content: center;
   }
   
   .carousel-control-prev-icon {
@@ -110,30 +112,37 @@
   
   .slide img {
     width: 100%; /* make the image full width */
-    height: 60%; /* adjust the height as needed */
+    height: 90%; /* adjust the height as needed */
     object-fit: cover; /* make the image cover the entire slide */
     border-radius: 10px 10px 0 0; /* add some border radius to create a carousel effect */
   }
 
+  .header{
+    margin-top: 60px;
+    text-align: center;
+  }
+
+  
   .project-cards {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: start;
   }
   
   .project-card {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    /* align-items: center; */
     padding: 20px;
-    margin: 20px;
+    margin: 15px;
     border: 1px solid #ddd;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 30%;
   }
   
   .project-card img {
-    width: 250px;
+    width: 95%;
     height: 300px;
     border-radius: 10%;
     margin-bottom: 10px;
@@ -142,15 +151,60 @@
   .project-info {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: start;
+    text-overflow: ellipsis;
   }
   
   .project-info h3 {
     margin-bottom: 10px;
-  }
+    height: 80px;
+    padding: 10px 0px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+
+
+  } 
   
   .project-info p {
+    margin: 10px 0px;
+
+  }
+
+  .project-info > .butn{
+    text-decoration: none;
+    background-color: #2db456;
+    color: #fff;
+    border-radius: 5px;
+    transition: 0.3s;
+    width: 90%;
+    height: 50px;
+    margin: auto;
+    margin-top: 20px;
+    text-decoration: double;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: large;
+
+
+  }
+
+  #searchH{
+    text-decoration: none;
+    margin: 10px;
+    padding: 10px;
     margin-bottom: 10px;
+    height: 70px;
+    color:#23527c;
+    font-size: 30px;
+    font-weight: bold;
+    text-align: center;
+    text-overflow: ellipsis;
+  }
+
+  .btn.btn-primary:hover {
+    background-color: #23527c;
   }
  
   
@@ -284,3 +338,33 @@
     background-color: #337ab7;
     color: #fff;
   }
+
+
+
+  .btn-outline-success-custom {
+    border-color: #28a745; /* Set border color to green */
+    color: #28a745; /* Set text color to green */
+    transition: background-color 0.3s, color 0.3s; /* Smooth transition */
+}
+
+.btn-outline-success-custom:hover,
+.btn-outline-success-custom:focus,
+.btn-outline-success-custom:active {
+    background-color: #28a745; /* Green background on hover and click */
+    color: #fff; /* White text on hover and click */
+    border-color: #28a745; /* Keep border green */
+    outline: none; /* Remove outline on focus */
+}
+
+.btn-outline-success-custom:active {
+    background-color: #218838; /* Slightly darker green on click */
+    border-color: #1e7e34; /* Adjust border color when clicked */
+    color: #fff;
+    box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125); /* Add inset shadow to give a pressed effect */
+}
+
+/* Progress Bar */
+.progress-bar-success {
+  background-color: #28a745; /* Bootstrap success green */
+}
+

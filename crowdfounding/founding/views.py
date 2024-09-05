@@ -5,6 +5,7 @@ from .models import *
 from  django.db.models import  Avg
 from .models import Project,Category,Rating
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 
 # Create your views here.
 def home(request):
@@ -21,6 +22,14 @@ def home(request):
         'latest_projects': latest_projects,
         'categories': categories,
     })
+
+
+def search_projects(request):
+    query = request.GET.get('q')
+    projects = Project.objects.filter(
+        Q(title__icontains=query) | Q(tags__icontains=query)
+    )
+    return render(request, 'founding/search_results.html', {'projects': projects})
 
 
 # def home(request):
@@ -73,26 +82,30 @@ def project_detail(request, pk):
         if 'donate' in request.POST:
             # Handle donation
             amount = request.POST.get('amount')
-            if amount and float(amount) > 0:
-                Donation.objects.create(user=request.user, project=project, amount=amount)
+            if amount and int(amount) > 0:
+                project.current_amount += int(amount)  # Ensure amount is added as integer
+                project.save()
+                Donation.objects.create(user=request.user, project=project, amount=int(amount))
                 return redirect('project_detail', pk=pk)
-
+            
         elif 'comment' in request.POST:
             # Handle comment submission
-            comment_form = CommentForm(request.POST)
-            if comment_form.is_valid():
-                comment = comment_form.save(commit=False)
-                comment.user = request.user
-                comment.project = project
-                comment.save()
-                return redirect('project_detail', pk=pk)
+            if request.user.is_authenticated:
+                comment_form = CommentForm(request.POST)
+                if comment_form.is_valid():
+                    comment = comment_form.save(commit=False)
+                    comment.user = request.user
+                    comment.project = project
+                    comment.save()
+                    return redirect('project_detail', pk=pk)
+            else:
+                return redirect('login')  # Redirect to login if not authenticated
 
     return render(request, 'founding/project_detail.html', {
         'project': project,
         'related_projects': related_projects,
         'comment_form': comment_form
     })
-
 
 
 
