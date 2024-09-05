@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from .forms import ProjectForm,CategoryForm,LoginForm
 from .models import *
-from  django.db.models import Avg
+from  django.db.models import  Avg
 from .models import Project,Category,Rating
 
 # Create your views here.
