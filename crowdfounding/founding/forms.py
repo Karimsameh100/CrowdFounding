@@ -11,6 +11,11 @@ class ProjectForm(forms.ModelForm):
         model = Project
         fields = ['title', 'details', 'category', 'pictures', 'total_target', 'tags', 'start_time', 'end_time']
 
+class ProjectPictureForm(forms.ModelForm):
+    class Meta:
+        model = ProjectPicture
+        fields = ['image']
+        
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment

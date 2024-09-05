@@ -16,6 +16,7 @@ class Project(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, default=1)
     pictures = models.ImageField(upload_to='project_images/', blank=True, null=True)
     total_target = models.DecimalField(max_digits=10, decimal_places=2)
+    current_amount = models.IntegerField(default=0)
     tags = models.CharField(max_length=200, help_text="Comma-separated tags")
     start_time = models.DateTimeField(default=timezone.now)
     end_time = models.DateTimeField()
@@ -24,16 +25,28 @@ class Project(models.Model):
     @property
     def is_featured(self):
         return self.donations.count() > 10 or self.ratings.count() > 5
-
+    
+    @property
+    def progress(self):
+        if self.total_target > 0:
+            return (self.current_amount / self.total_target) * 100
+        return 0
+    
     def __str__(self):
         return self.title
 
+class ProjectPicture(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='project_pictures')
+    image = models.ImageField(upload_to='project_images/')
 
+    def __str__(self):
+        return f"Picture for {self.project.title}"
+    
 class Donation(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='donations')  # Associate donation with user
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='donations')
   
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    amount = models.IntegerField()
     date_donated = models.DateTimeField(auto_now_add=True)
 
 
