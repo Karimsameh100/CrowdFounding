@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
-from .forms import ProjectForm,CategoryForm,LoginForm
+from .forms import *
 from .models import *
 from  django.db.models import  Avg
 from .models import Project,Category,Rating
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def home(request):
@@ -41,7 +42,7 @@ def create_category(request):
         form = CategoryForm()
     return render(request, 'founding/create_category.html', {'form': form})
 
-
+@login_required
 def create_project(request):
     if request.method == 'POST':
         form = ProjectForm(request.POST, request.FILES)
@@ -62,12 +63,35 @@ def project_list(request):
     projects = Project.objects.filter(is_active=True)
     return render(request, 'founding/project_list.html', {'projects': projects})
 
-
+@login_required
 def project_detail(request, pk):
     project = get_object_or_404(Project, pk=pk)
-    return render(request, 'founding/project_detail.html', {'project': project})
+    related_projects = Project.objects.filter(category=project.category).exclude(pk=pk)[:5]
+    comment_form = CommentForm()
 
+    if request.method == 'POST':
+        if 'donate' in request.POST:
+            # Handle donation
+            amount = request.POST.get('amount')
+            if amount and float(amount) > 0:
+                Donation.objects.create(user=request.user, project=project, amount=amount)
+                return redirect('project_detail', pk=pk)
 
+        elif 'comment' in request.POST:
+            # Handle comment submission
+            comment_form = CommentForm(request.POST)
+            if comment_form.is_valid():
+                comment = comment_form.save(commit=False)
+                comment.user = request.user
+                comment.project = project
+                comment.save()
+                return redirect('project_detail', pk=pk)
+
+    return render(request, 'founding/project_detail.html', {
+        'project': project,
+        'related_projects': related_projects,
+        'comment_form': comment_form
+    })
 
 
 
@@ -80,7 +104,7 @@ from django.http import HttpResponse
 
 from .forms import RegistrationForm
 # from django.contrib.auth.models import User
-from .models import MyUser
+
 
 
 
@@ -121,8 +145,7 @@ def register(request):
 from django.contrib.auth import authenticate, login as auth_login
 
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
-from .models import MyUser  
+from django.http import HttpResponse 
 from .forms import LoginForm
 
 def login(request):
@@ -134,16 +157,17 @@ def login(request):
             password = form.cleaned_data['password']
             
             
-            user = MyUser.objects.filter(email=email, password=password)
-            # user = User.objects.filter(email=email, password=password)
+           # Authenticate the user
+            user = authenticate(request, username=email, password=password)
             
-            if user.exists():  
-                request.session['email'] = email
-                return redirect('home')  
+            if user is not None:
+                # Log the user in
+                auth_login(request, user)
+                return redirect('home')  # Redirect to home page after login
             else:
-                return HttpResponse('Invalid login credentials.')  
+                return HttpResponse('Invalid login credentials.')  # Show error message if authentication fails
         else:
-            return HttpResponse('Invalid form input.')  
+            return HttpResponse('Invalid form input.')  # Show error if form is not valid
     else:
         form = LoginForm()
     
