@@ -58,11 +58,13 @@ class Comment(models.Model):
     parent = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True, related_name='replies')
     reported = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
 class Rating(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='ratings')
    
     rating = models.PositiveIntegerField(default=0)  # Range 1 to 5
+    date =models.DateTimeField(auto_now=True)
 
 
 
