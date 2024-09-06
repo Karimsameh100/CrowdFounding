@@ -1,11 +1,31 @@
-<!-- category_list.html -->
+{% extends 'base.html' %}
+
+{% block title %}Categories{% endblock %}
+
+{% block content %}
 <div class="container mt-5">
-    <h2>Categories</h2>
-    <ul class="list-group">
-        {% for category in categories %}
-        <li class="list-group-item">{{ category.name }}</li>
-        {% empty %}
-        <li class="list-group-item">No categories found.</li>
-        {% endfor %}
-    </ul>
+    <div class="text-center mb-4">
+        <h2 class="display-4">Categories</h2>
+        <p class="lead">Explore our various categories below.</p>
+    </div>
+    <div class="row">
+        {% if categories %}
+            {% for category in categories %}
+                <div class="col-md-4 mb-3">
+                    <div class="card border-success shadow-sm">
+                        <div class="card-body text-center">
+                            <h5 class="card-title text-success">{{ category.name }}</h5>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-12">
+                <div class="alert alert-info text-center" role="alert">
+                    No categories found.
+                </div>
+            </div>
+        {% endif %}
+    </div>
 </div>
+{% endblock %}

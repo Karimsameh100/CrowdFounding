@@ -1,73 +1,83 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="row g-4">
-    <div class="col-md-8">
-        <h2 class="project-title text-success">{{ project.title }}</h2>
-        <div class="d-flex flex-wrap mb-3">
-            {% for picture in project.project_pictures.all %}
-                <img src="{{ picture.image.url }}" class="img-fluid rounded me-3 mb-3" alt="{{ project.title }}" style="width: 100%; max-width: 200px; height: auto; object-fit: cover;">
-            {% endfor %}
-        </div>
-        <p>{{ project.details }}</p>
+<div class="container mt-5">
+    <div class="row g-4">
+        <!-- Project Details -->
+        <div class="col-md-8">
+            <!-- Project Title and Primary Picture -->
+            <h2 class="project-title text-success mb-4">{{ project.title }}</h2>
+            {% if project.pictures %}
+                <img src="{{ project.pictures.url }}" class="img-fluid rounded mb-4" alt="{{ project.title }}" style="width: 100%; max-width: 600px; height: auto; object-fit: cover;">
+            {% endif %}
 
-        <!-- Progress Bar -->
-        <div class="progress mb-3">
-            <div class="progress-bar progress-bar-success" role="progressbar" style="width: {{ project.progress }}%;" aria-valuenow="{{ project.progress }}" aria-valuemin="0" aria-valuemax="100">
-                {{ project.progress }}%
+            <!-- Additional Project Pictures -->
+            <div class="d-flex flex-wrap mb-4">
+                {% for picture in project.project_pictures.all %}
+                    <img src="{{ picture.image.url }}" class="img-fluid rounded me-3 mb-3" alt="{{ project.title }}" style="width: 100%; max-width: 300px; height: auto; object-fit: cover;">
+                {% endfor %}
             </div>
+
+            <p class="mb-4">{{ project.details }}</p>
+
+            <!-- Progress Bar -->
+            <div class="progress mb-4" style="height: 30px;">
+                <div class="progress-bar bg-success" role="progressbar" style="width: {{ project.progress }}%;" aria-valuenow="{{ project.progress }}" aria-valuemin="0" aria-valuemax="100">
+                    <span class="sr-only">{{ project.progress }}%</span>
+                </div>
+            </div>
+
+            <!-- Donation Form -->
+            {% if user.is_authenticated %}
+                <form method="POST" class="mb-4">
+                    {% csrf_token %}
+                    <div class="input-group">
+                        <input type="number" name="amount" class="form-control" placeholder="Enter donation amount" required>
+                        <button type="submit" name="donate" class="btn btn-success btn-block rounded-pill">Donate Now</button>
+                    </div>
+                </form>
+            {% else %}
+                <p class="mb-4">Please <a href="{% url 'login' %}">login</a> to donate.</p>
+            {% endif %}
+
+            <hr class="my-4">
+
+            <!-- Comments Section -->
+            <h5 class="text-success mb-3">Comments</h5>
+            <div class="comments-section mb-4">
+                {% for comment in project.comments.all %}
+                    <div class="comment mb-3 p-3 border rounded">
+                        <strong>{{ comment.user.username }}</strong> - <small class="text-muted">{{ comment.created_at|date:"M d, Y" }}</small>
+                        <p class="mt-2">{{ comment.content }}</p>
+                    </div>
+                {% empty %}
+                    <p>No comments yet. Be the first to comment!</p>
+                {% endfor %}
+            </div>
+
+            <!-- Add Comment Form (only visible to logged-in users) -->
+            {% if user.is_authenticated %}
+                <form method="POST" class="form-section">
+                    {% csrf_token %}
+                    {{ comment_form.as_p }}
+                    <button type="submit" name="comment" class="btn btn-success btn-block rounded-pill">Add Comment</button>
+                </form>
+            {% else %}
+                <p class="mt-4">Please <a href="{% url 'login' %}">login</a> to add a comment or donate.</p>
+            {% endif %}
         </div>
 
-        <!-- Donation Form -->
-        {% if user.is_authenticated %}
-            <form method="POST" class="mb-4">
-                {% csrf_token %}
-                <div class="input-group mb-3">
-                    <input type="number" name="amount" class="form-control" placeholder="Enter donation amount" required>
-                    <button type="submit" name="donate" class="btn btn-outline-success btn-outline-success-custom btn-block rounded-pill">Donate Now</button>
-                </div>
-            </form>
-        {% else %}
-            <p>Please <a href="{% url 'login' %}">login</a> to donate.</p>
-        {% endif %}
-
-        <hr>
-
-        <!-- Comments Section -->
-        <h5 class="text-success">Comments</h5>
-        <div class="comments-section">
-            {% for comment in project.comments.all %}
-                <div class="comment">
-                    <strong>{{ comment.user.username }}</strong> - {{ comment.created_at|date:"M d, Y" }}
-                    <p>{{ comment.content }}</p>
-                </div>
-            {% empty %}
-                <p>No comments yet. Be the first to comment!</p>
-            {% endfor %}
+        <!-- Related Projects Section -->
+        <div class="col-md-4">
+            <h4 class="mb-4 text-success">Related Projects</h4>
+            <ul class="list-group">
+                {% for similar_project in related_projects %}
+                    <li class="list-group-item">
+                        <a href="{% url 'project_detail' similar_project.pk %}" class="text-decoration-none text-success">{{ similar_project.title }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
         </div>
-
-        <!-- Add Comment Form (only visible to logged-in users) -->
-        {% if user.is_authenticated %}
-            <form method="POST" class="form-section">
-                {% csrf_token %}
-                {{ comment_form.as_p }}
-                <button type="submit" name="comment"  class="btn btn-outline-success btn-outline-success-custom btn-block rounded-pill">Add Comment</button>
-            </form>
-        {% else %}
-            <p>Please <a href="{% url 'login' %}">login</a> to add a comment or donate.</p>
-        {% endif %}
-    </div>
-
-    <!-- Related Projects Section -->
-    <div class="col-md-4">
-        <h4 class="mb-3 text-success">Related Projects</h4>
-        <ul class="list-group text-success">
-            {% for similar_project in related_projects %}
-                <li class="list-group-item">
-                    <a href="{% url 'project_detail' similar_project.pk %}" class="text-decoration-none text-success">{{ similar_project.title }}</a>
-                </li>
-            {% endfor %}
-        </ul>
     </div>
 </div>
 {% endblock %}
