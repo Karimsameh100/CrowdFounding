@@ -71,13 +71,17 @@
 
   <!-- List of categories -->
   <h2 class="header">Categories</h2>
-  <ul>
+  <div class="row">
     {% for category in categories %}
-      <li>
-        <a href="{% url 'category_projects' category.id %}">{{ category.name }}</a>
-      </li>
+      <div class="col-md-4 mb-3">
+        <div class="card border-success shadow-sm">
+          <div class="card-body text-center">
+            <h5 class="card-title text-success">{{ category.name }}</h5>
+          </div>
+        </div>
+      </div>
     {% endfor %}
-  </ul>
+  </div>
 
   <!-- Search bar -->
   {% comment %} <form action="{% url 'search_projects' %}" method="get">

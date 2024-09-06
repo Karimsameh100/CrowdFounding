@@ -6,6 +6,7 @@ from  django.db.models import  Avg
 from .models import Project,Category,Rating
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+from django.contrib.auth import logout as auth_logout
 
 # Create your views here.
 def home(request):
@@ -63,7 +64,7 @@ def create_project(request):
     categories = Category.objects.all()  # Fetch categories to render in the form
     return render(request, 'founding/create_project.html', {'form': form, 'categories': categories})
 
-
+@login_required
 def category_list(request):
     categories = Category.objects.all()
     return render(request, 'founding/category_list.html', {'categories': categories})
@@ -223,6 +224,9 @@ def login(request):
     
     return render(request, 'founding/login.html', {'form': form})
 
+def logout(request):
+    auth_logout(request)
+    return redirect('home')
            
               
     

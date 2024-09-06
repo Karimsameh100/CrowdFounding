@@ -213,13 +213,13 @@
 /* Footer styles */
 
 .footer {
-    background-color: #337ab7;
-    color: #000;
-    padding: 20px;
-    text-align: center;
-    clear: both;
-    border-top: 1px solid #23527c;
-  }
+  background-color: #28a745; /* Background color of the footer */
+  color: #28a745; /* Text color set to green */
+  padding: 20px;
+  text-align: center;
+  clear: both;
+  border-top: 1px solid #23527c;
+}
   
   .footer .container {
     display: flex;
@@ -341,30 +341,33 @@
 
 
 
+  /* Update the search button styling */
   .btn-outline-success-custom {
     border-color: #28a745; /* Set border color to green */
     color: #28a745; /* Set text color to green */
     transition: background-color 0.3s, color 0.3s; /* Smooth transition */
 }
 
-.btn-outline-success-custom:hover,
-.btn-outline-success-custom:focus,
-.btn-outline-success-custom:active {
-    background-color: #28a745; /* Green background on hover and click */
-    color: #fff; /* White text on hover and click */
-    border-color: #28a745; /* Keep border green */
-    outline: none; /* Remove outline on focus */
-}
+  .btn-outline-success-custom:hover,
+  .btn-outline-success-custom:focus,
+  .btn-outline-success-custom:active {
+      background-color: #28a745; /* Green background on hover and click */
+      color: #fff; /* White text on hover and click */
+      border-color: #28a745; /* Keep border green */
+      outline: none; /* Remove outline on focus */
+  }
 
-.btn-outline-success-custom:active {
-    background-color: #218838; /* Slightly darker green on click */
-    border-color: #1e7e34; /* Adjust border color when clicked */
-    color: #fff;
-    box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125); /* Add inset shadow to give a pressed effect */
-}
+  .btn-outline-success-custom:active {
+      background-color: #218838; /* Slightly darker green on click */
+      border-color: #1e7e34; /* Adjust border color when clicked */
+      color: #fff;
+      box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125); /* Add inset shadow to give a pressed effect */
+  }
 
-/* Progress Bar */
-.progress-bar-success {
-  background-color: #28a745; /* Bootstrap success green */
-}
+
+
+  /* Progress Bar */
+  .progress-bar-success {
+    background-color: #28a745; /* Bootstrap success green */
+  }
 

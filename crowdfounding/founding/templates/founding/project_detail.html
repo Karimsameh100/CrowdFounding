@@ -33,7 +33,7 @@
                     {% csrf_token %}
                     <div class="input-group">
                         <input type="number" name="amount" class="form-control" placeholder="Enter donation amount" required>
-                        <button type="submit" name="donate" class="btn btn-success btn-block rounded-pill">Donate Now</button>
+                        <button type="submit" name="donate" class="btn btn-outline-success-custom btn-block rounded-pill">Donate Now</button>
                     </div>
                 </form>
             {% else %}
@@ -60,7 +60,7 @@
                 <form method="POST" class="form-section">
                     {% csrf_token %}
                     {{ comment_form.as_p }}
-                    <button type="submit" name="comment" class="btn btn-success btn-block rounded-pill">Add Comment</button>
+                    <button type="submit" name="comment" class="btn btn-outline-success-custom btn-block rounded-pill">Add Comment</button>
                 </form>
             {% else %}
                 <p class="mt-4">Please <a href="{% url 'login' %}">login</a> to add a comment or donate.</p>
