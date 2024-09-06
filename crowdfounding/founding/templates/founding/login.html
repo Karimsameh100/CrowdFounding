@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html>
 
 <head>
@@ -75,6 +75,169 @@
        
     </form>
     
+</body>
+
+</html> -->
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        body {
+            background-color: #f0f8f4;
+            color: #333333;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 90%;
+            max-width: 1200px;
+        }
+
+        .form-container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            text-align: left;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+            width: 45%;
+        }
+
+        .form-container input[type="text"],
+        .form-container input[type="email"],
+        .form-container input[type="password"],
+        .form-container input[type="file"] {
+            width: 90%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        .form-container button[type="submit"] {
+            background-color: #4CAF50;
+            color: #ffffff;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .form-container button[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        .message-container {
+            width: 45%;
+            color: #2e8b57;
+            text-align: left;
+        }
+
+        .message-container h2 {
+            font-size: 4rem;
+            margin: 0;
+        }
+
+        .popup {
+            display: none;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 30px;
+            width: 80%;
+            max-width: 800px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+
+        .popup button {
+            background-color: #4CAF50;
+            color: #ffffff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .popup button:hover {
+            background-color: #45a049;
+        }
+
+        .popup a {
+            text-decoration: none;
+            color: #4CAF50;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="message-container">
+            <h2>Welcome Back!</h2>
+        </div>
+        <div class="form-container">
+            <h2 style="text-align: center;">Login</h2>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Submit</button>
+                <p style="text-align: center; margin-top: 15px;">
+                    Create new account? <a href="{% url 'register' %}">Sign Up</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Popup  -->
+    <div id="success-popup" class="popup">
+        <p>Login successful!</p>
+        <p>Do you want to <a href="/home">proceed to your account?</a></p>
+        <button onclick="closePopup()">Close</button>
+    </div>
+
+    <script>
+        // Show popup if login was successful
+        window.onload = function () {
+            {% if success %}
+            document.getElementById('success-popup').style.display = 'block';
+            {% endif %}
+        };
+
+        function closePopup() {
+            document.getElementById('success-popup').style.display = 'none';
+        }
+    </script>
+
 </body>
 
 </html>

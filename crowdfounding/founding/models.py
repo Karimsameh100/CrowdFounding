@@ -69,16 +69,16 @@ class Rating(models.Model):
 
 
 # ----------------------activation
-from django.db import models
-from django.contrib.auth.models import User
-from django.utils.timezone import now
-from datetime import timedelta
+# from django.db import models
+# from django.contrib.auth.models import User
+# from django.utils.timezone import now
+# from datetime import timedelta
 
-class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    is_active = models.BooleanField(default=False)
-    activation_token = models.CharField(max_length=64, null=True, blank=True)
-    activation_token_created_at = models.DateTimeField(default=now)
+# class Profile(models.Model):
+#     user = models.OneToOneField(User, on_delete=models.CASCADE)
+#     is_active = models.BooleanField(default=False)
+#     activation_token = models.CharField(max_length=64, null=True, blank=True)
+#     activation_token_created_at = models.DateTimeField(default=now)
 
-    def is_token_expired(self):
-        return self.activation_token_created_at < now() - timedelta(hours=24)
+#     def is_token_expired(self):
+#         return self.activation_token_created_at < now() - timedelta(hours=24)

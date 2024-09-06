@@ -125,62 +125,25 @@ from .forms import RegistrationForm
 
 
 
-# from django.shortcuts import render, redirect
-# from .forms import RegistrationForm
-# from django.contrib.auth.models import User
-
-# def register(request):
-#     if request.method == 'POST':
-#         form = RegistrationForm(request.POST, request.FILES)
-#         if form.is_valid():
-           
-#             user = User(
-#                 first_name=form.cleaned_data['first_name'],
-#                 last_name=form.cleaned_data['last_name'],
-#                 email=form.cleaned_data['email'],
-#                 username=form.cleaned_data['email']
-#             )
-#             user.set_password(form.cleaned_data['password'])
-#             user.save()
-
-           
-#             return render(request, 'founding/registerform.html', {
-#                 'form': form,
-#                 'success': True
-#             })
-#     else:
-#         form = RegistrationForm()
-
-#     return render(request, 'founding/registerform.html', {'form': form})
-
 from django.shortcuts import render, redirect
 from .forms import RegistrationForm
 from django.contrib.auth.models import User
-from .models import Profile
-# from .utils import send_activation_email  # تأكد من أن وظيفة send_activation_email متاحة هنا
 
 def register(request):
     if request.method == 'POST':
         form = RegistrationForm(request.POST, request.FILES)
         if form.is_valid():
            
-          
             user = User(
                 first_name=form.cleaned_data['first_name'],
                 last_name=form.cleaned_data['last_name'],
                 email=form.cleaned_data['email'],
-                username=form.cleaned_data['email'],
-                is_active=False 
+                username=form.cleaned_data['email']
             )
             user.set_password(form.cleaned_data['password'])
             user.save()
 
-            profile = Profile(user=user)
-            profile.save()
-
-            send_activation_email(user, request)
-
-        
+           
             return render(request, 'founding/registerform.html', {
                 'form': form,
                 'success': True
@@ -189,6 +152,44 @@ def register(request):
         form = RegistrationForm()
 
     return render(request, 'founding/registerform.html', {'form': form})
+# -------------------------act 
+
+# from django.shortcuts import render, redirect
+# from .forms import RegistrationForm
+# from django.contrib.auth.models import User
+# from .models import Profile
+# # from .utils import send_activation_email  # تأكد من أن وظيفة send_activation_email متاحة هنا
+
+# def register(request):
+#     if request.method == 'POST':
+#         form = RegistrationForm(request.POST, request.FILES)
+#         if form.is_valid():
+           
+          
+#             user = User(
+#                 first_name=form.cleaned_data['first_name'],
+#                 last_name=form.cleaned_data['last_name'],
+#                 email=form.cleaned_data['email'],
+#                 username=form.cleaned_data['email'],
+#                 is_active=False 
+#             )
+#             user.set_password(form.cleaned_data['password'])
+#             user.save()
+
+#             profile = Profile(user=user)
+#             profile.save()
+
+#             send_activation_email(user, request)
+
+        
+#             return render(request, 'founding/registerform.html', {
+#                 'form': form,
+#                 'success': True
+#             })
+#     else:
+#         form = RegistrationForm()
+
+#     return render(request, 'founding/registerform.html', {'form': form})
 
 # ////////////////////////
 from django.contrib.auth import authenticate, login as auth_login
@@ -226,37 +227,35 @@ def login(request):
               
     
     # -------------------------------------------------activation 
-import hashlib
-import random
-from django.core.mail import send_mail
-from django.utils.http import urlsafe_base64_encode
-from django.utils.encoding import force_bytes
-from django.template.loader import render_to_string
-from django.contrib.sites.shortcuts import get_current_site
-from django.urls import reverse
-from .models import Profile
+# import hashlib
+# import random
+# from django.core.mail import send_mail
+# from django.utils.http import urlsafe_base64_encode
+# from django.utils.encoding import force_bytes
+# from django.template.loader import render_to_string
+# from django.contrib.sites.shortcuts import get_current_site
+# from django.urls import reverse
+# from .models import Profile
 
-def send_activation_email(user, request):
-    token = hashlib.sha256(str(random.random()).encode()).hexdigest()
-    profile = Profile.objects.get(user=user)
-    profile.activation_token = token
-    profile.activation_token_created_at = now()
-    profile.save()
+# def send_activation_email(user, request):
+#     token = hashlib.sha256(str(random.random()).encode()).hexdigest()
+#     profile = Profile.objects.get(user=user)
+#     profile.activation_token = token
+#     profile.activation_token_created_at = now()
+#     profile.save()
 
-    current_site = get_current_site(request)
-    mail_subject = 'Activate your account'
-    uid = urlsafe_base64_encode(force_bytes(user.pk))
-    activation_link = reverse('activate', kwargs={'uidb64': uid, 'token': token})
-    activation_url = f'http://{current_site.domain}{activation_link}'
+#     current_site = get_current_site(request)
+#     mail_subject = 'Activate your account'
+#     uid = urlsafe_base64_encode(force_bytes(user.pk))
+#     activation_link = reverse('activate', kwargs={'uidb64': uid, 'token': token})
+#     activation_url = f'http://{current_site.domain}{activation_link}'
 
-    message = render_to_string('founding/activation_email.html', {
-        'user': user,
-        'activation_url': activation_url,
-    })
+#     message = render_to_string('founding/activation_email.html', {
+#         'user': user,
+#         'activation_url': activation_url,
+#     })
 
-    send_mail(mail_subject, message, 'noreply@yourdomain.com', [user.email])
-
-
+#     send_mail(mail_subject, message, 'noreply@yourdomain.com', [user.email])
 
 
 
@@ -267,26 +266,28 @@ def send_activation_email(user, request):
 
 
 
-from django.contrib.auth.models import User
-from django.utils.http import urlsafe_base64_decode
-from django.shortcuts import render, redirect, get_object_or_404
-from django.utils.encoding import force_str
-from .models import Profile
 
-def activate_account(request, uidb64, token):
-    try:
-        uid = force_str(urlsafe_base64_decode(uidb64))
-        user = User.objects.get(pk=uid)
-        profile = Profile.objects.get(user=user)
-    except (TypeError, ValueError, OverflowError, User.DoesNotExist, Profile.DoesNotExist):
-        user = None
 
-    if user and profile.activation_token == token and not profile.is_token_expired():
-        user.is_active = True
-        user.save()
-        profile.is_active = True
-        profile.activation_token = None
-        profile.save()
-        return render(request, 'founding/activation_success.html')
-    else:
-        return render(request, 'founding/activation_failed.html')
+# from django.contrib.auth.models import User
+# from django.utils.http import urlsafe_base64_decode
+# from django.shortcuts import render, redirect, get_object_or_404
+# from django.utils.encoding import force_str
+# from .models import Profile
+
+# def activate_account(request, uidb64, token):
+#     try:
+#         uid = force_str(urlsafe_base64_decode(uidb64))
+#         user = User.objects.get(pk=uid)
+#         profile = Profile.objects.get(user=user)
+#     except (TypeError, ValueError, OverflowError, User.DoesNotExist, Profile.DoesNotExist):
+#         user = None
+
+#     if user and profile.activation_token == token and not profile.is_token_expired():
+#         user.is_active = True
+#         user.save()
+#         profile.is_active = True
+#         profile.activation_token = None
+#         profile.save()
+#         return render(request, 'founding/activation_success.html')
+#     else:
+#         return render(request, 'founding/activation_failed.html')

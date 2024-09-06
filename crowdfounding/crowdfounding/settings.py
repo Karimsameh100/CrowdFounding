@@ -136,22 +136,22 @@ MEDIA_URL = '/media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# LOGIN_URL = '/founding/login/' 
+LOGIN_URL = '/founding/login/' 
 
 # =================================================
-LOGIN_REDIRECT_URL = 'profile'  
-LOGIN_URL = 'login'  
+# LOGIN_REDIRECT_URL = 'profile'  
+# LOGIN_URL = 'login'  
 
-AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',
-    'yourapp.backends.EmailOrUsernameModelBackend',  
-]
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.mailersend.net'
-EMAIL_PORT =587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'MS_DlEL2o@trial-ynrw7gyp9j2g2k8e.mlsender.net'
-EMAIL_HOST_PASSWORD = 'WQ4SqucchRfVPLj1'
+# AUTHENTICATION_BACKENDS = [
+#     'django.contrib.auth.backends.ModelBackend',
+#     'yourapp.backends.EmailOrUsernameModelBackend',  
+# ]
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.mailersend.net'
+# EMAIL_PORT =587
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = 'MS_DlEL2o@trial-ynrw7gyp9j2g2k8e.mlsender.net'
+# EMAIL_HOST_PASSWORD = 'WQ4SqucchRfVPLj1'
 
 
 
