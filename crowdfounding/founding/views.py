@@ -6,6 +6,7 @@ from  django.db.models import  Avg
 from .models import Project,Category,Rating
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+from .forms import RatingForm
 
 # Create your views here.
 def home(request):
@@ -77,6 +78,7 @@ def project_detail(request, pk):
     project = get_object_or_404(Project, pk=pk)
     related_projects = Project.objects.filter(category=project.category).exclude(pk=pk)[:5]
     comment_form = CommentForm()
+    rating_form = RatingForm() 
 
     if request.method == 'POST':
         if 'donate' in request.POST:
@@ -101,10 +103,28 @@ def project_detail(request, pk):
             else:
                 return redirect('login')  # Redirect to login if not authenticated
 
+        elif 'rate' in request.POST:
+            # Handle rating submission
+            rating_form = RatingForm(request.POST)
+            if rating_form.is_valid():
+                rating = rating_form.save(commit=False)
+                rating.project = project
+                rating.user = request.user
+                rating.save()
+                # Update project's average rating
+                project.ratings.all().aggregate(Avg('rating'))['rating__avg']
+                return redirect('project_detail', pk=pk)
+            
+        
+    project_avg_rating = project.ratings.all().aggregate(Avg('rating'))['rating__avg']      
+        
+
     return render(request, 'founding/project_detail.html', {
         'project': project,
         'related_projects': related_projects,
-        'comment_form': comment_form
+        'comment_form': comment_form,
+        'rating_form': rating_form,
+        'project_avg_rating': project_avg_rating
     })
 
 

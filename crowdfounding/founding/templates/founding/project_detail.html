@@ -77,6 +77,50 @@
                     </li>
                 {% endfor %}
             </ul>
+        {% if project_avg_rating %}
+            <p>Average Rating: {{ project_avg_rating }}</p>
+        {% else %}
+            <p>No ratings yet!</p>
+        {% endif %}
+
+        <!-- Donation Form -->
+        {% if user.is_authenticated %}
+            <form method="POST" class="mb-4">
+                {% csrf_token %}
+                <div class="input-group mb-3">
+                    <input type="number" name="amount" class="form-control" placeholder="Enter donation amount" required>
+                    <button type="submit" name="donate" class="btn btn-outline-success btn-outline-success-custom btn-block rounded-pill">Donate Now</button>
+                </div>
+            </form>
+            <form class="form-inline my-2 my-lg-0" method="post">
+                {% csrf_token %}
+                {{ rating_form }}
+                <button class="ml-4  btn btn-sm btn-primary" type="submit" name="rate">Rate Project</button>
+            </form> 
+        {% else %}
+            <p>Please <a href="{% url 'login' %}">login</a> to donate.</p>
+        {% endif %}
+
+        
+
+        {% comment %} <form method="post">
+            {% csrf_token %}
+            {{ rating_form }}
+            <button type="submit" name="rate">Rate Project</button>
+        </form> {% endcomment %}
+        <hr>
+
+        <!-- Comments Section -->
+        <h5 class="text-success">Comments</h5>
+        <div class="comments-section">
+            {% for comment in project.comments.all %}
+                <div class="comment">
+                    <strong>{{ comment.user.username }}</strong> - {{ comment.created_at|date:"M d, Y" }}
+                    <p>{{ comment.content }}</p>
+                </div>
+            {% empty %}
+                <p>No comments yet. Be the first to comment!</p>
+            {% endfor %}
         </div>
     </div>
 </div>
